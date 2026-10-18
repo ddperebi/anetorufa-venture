@@ -1,0 +1,16 @@
+[
+  {
+    "id": "av_msg_1792280407519_6dw7d3",
+    "fullName": "Tariere Williams",
+    "phoneNumber": "08031234567",
+    "email": "tariere@example.com",
+    "enquiryType": "Product Availability and Prices",
+    "subject": "Enquiry about 50kg bag of Rice",
+    "message": "Hello Anetorufa Ventures, please do you have 50kg bags of Mama Gold or Big Bull rice in stock, and what is the current price per bag?",
+    "consent": true,
+    "createdAt": "2026-10-17T23:40:07.519Z",
+    "deliveryStatus": "saved_inbox_pending_owner_setup",
+    "ip": "127.0.0.1",
+    "userAgent": "curl/7.88.1"
+  }
+]
