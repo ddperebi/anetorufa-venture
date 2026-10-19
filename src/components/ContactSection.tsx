@@ -193,6 +193,7 @@ export const ContactSection: React.FC = () => {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
+          signal: AbortSignal.timeout(10000),
           body: JSON.stringify({
             _subject: `[Anetorufa Website Enquiry] ${formData.enquiryType}: ${formData.subject.trim()}`,
             name: formData.fullName.trim(),

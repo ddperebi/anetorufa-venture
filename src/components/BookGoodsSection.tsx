@@ -254,6 +254,7 @@ export const BookGoodsSection: React.FC = () => {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
+          signal: AbortSignal.timeout(10000),
           body: JSON.stringify({
             _subject: `[Goods Pre-Order ${ref}] ${customerName} - ${fulfillmentType === 'delivery' ? 'DELIVERY' : 'STORE PICKUP'}`,
             bookingReference: ref,
