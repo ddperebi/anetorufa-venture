@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag, Landmark, Mail, Phone, CheckCircle2, ShieldCheck, Zap, HeartHandshake } from 'lucide-react';
+import { ShoppingBag, Landmark, Mail, Phone, CheckCircle2, ShieldCheck, Zap, HeartHandshake, Package } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/categories';
 import heroStoreImg from '../assets/images/hero_provisions_store_1792279980985.jpg';
 
@@ -45,43 +45,53 @@ export const Hero: React.FC = () => {
               </p>
             </div>
 
-            {/* 4 Action Buttons as requested */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 max-w-lg mx-auto lg:mx-0 pt-1">
-              {/* Button 1: Explore Our Products */}
+            {/* Action Buttons with Book Goods Highlight */}
+            <div className="space-y-2.5 max-w-lg mx-auto lg:mx-0 pt-1">
               <a
-                href="#products"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-base font-bold text-white bg-[#650A80] hover:bg-[#49065D] active:bg-[#49065D] rounded-xl shadow-md transition-all active:scale-98"
+                href="#book-goods"
+                className="w-full inline-flex items-center justify-center gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-base font-extrabold text-white bg-[#07852D] hover:bg-[#055C1F] rounded-xl shadow-md transition-all active:scale-98 border border-[#72E52E]/40"
               >
-                <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span>Explore Our Products</span>
+                <Package className="w-4 h-4 sm:w-5 sm:h-5 text-[#72E52E]" />
+                <span>Pre-Order & Book Goods in Advance</span>
               </a>
 
-              {/* Button 2: Our Banking Services */}
-              <a
-                href="#banking"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-base font-bold text-[#07852D] bg-[#E8F7ED] hover:bg-[#D5F2DE] active:bg-[#D5F2DE] border border-[#07852D]/30 rounded-xl transition-all active:scale-98"
-              >
-                <Landmark className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span>Our Banking Services</span>
-              </a>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+                {/* Button 1: Explore Our Products */}
+                <a
+                  href="#products"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-white bg-[#650A80] hover:bg-[#49065D] active:bg-[#49065D] rounded-xl shadow-xs transition-all active:scale-98"
+                >
+                  <ShoppingBag className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  <span>Explore Our Products</span>
+                </a>
 
-              {/* Button 3: Contact Us */}
-              <a
-                href="#contact"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-base font-bold text-gray-800 bg-white hover:bg-gray-50 active:bg-gray-100 border border-gray-300 rounded-xl shadow-xs transition-all active:scale-98"
-              >
-                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#650A80]" />
-                <span>Contact Us</span>
-              </a>
+                {/* Button 2: Our Banking Services */}
+                <a
+                  href="#banking"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-[#07852D] bg-[#E8F7ED] hover:bg-[#D5F2DE] active:bg-[#D5F2DE] border border-[#07852D]/30 rounded-xl transition-all active:scale-98"
+                >
+                  <Landmark className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  <span>Our Banking Services</span>
+                </a>
 
-              {/* Button 4: Call Us Now (Calls 08137590538) */}
-              <a
-                href={BUSINESS_INFO.phoneTel}
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 sm:px-5 sm:py-3.5 text-xs sm:text-base font-bold text-white bg-[#07852D] hover:bg-[#055C1F] active:bg-[#055C1F] rounded-xl shadow-md transition-all active:scale-98"
-              >
-                <Phone className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
-                <span>Call Us Now ({BUSINESS_INFO.phone})</span>
-              </a>
+                {/* Button 3: Contact Us */}
+                <a
+                  href="#contact"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-gray-800 bg-white hover:bg-gray-50 active:bg-gray-100 border border-gray-300 rounded-xl shadow-xs transition-all active:scale-98"
+                >
+                  <Mail className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-[#650A80]" />
+                  <span>Contact Us</span>
+                </a>
+
+                {/* Button 4: Call Us Now (Calls 08137590538) */}
+                <a
+                  href={BUSINESS_INFO.phoneTel}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 sm:py-3 text-xs sm:text-sm font-bold text-gray-800 bg-white hover:bg-emerald-50 active:bg-emerald-100 border border-emerald-300 rounded-xl shadow-xs transition-all active:scale-98"
+                >
+                  <Phone className="w-4 h-4 sm:w-4.5 sm:h-4.5 fill-[#07852D] text-[#07852D]" />
+                  <span>Call {BUSINESS_INFO.phone}</span>
+                </a>
+              </div>
             </div>
           </div>
 

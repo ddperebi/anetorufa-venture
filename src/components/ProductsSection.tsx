@@ -4,11 +4,16 @@ import { PRODUCT_CATEGORIES, ProductCategory, BUSINESS_INFO } from '../data/cate
 
 interface ProductsSectionProps {
   onSelectCategoryForEnquiry?: (category: ProductCategory) => void;
+  onSelectCategoryForBooking?: (category: ProductCategory) => void;
 }
 
-export const ProductsSection: React.FC<ProductsSectionProps> = ({ onSelectCategoryForEnquiry }) => {
+export const ProductsSection: React.FC<ProductsSectionProps> = ({
+  onSelectCategoryForEnquiry,
+  onSelectCategoryForBooking,
+}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategoryModal, setActiveCategoryModal] = useState<ProductCategory | null>(null);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   const filteredCategories = PRODUCT_CATEGORIES.filter((cat) => {
     const term = searchTerm.toLowerCase().trim();
@@ -19,6 +24,25 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ onSelectCatego
       cat.highlights.some((h) => h.toLowerCase().includes(term))
     );
   });
+
+  const handleBookCategory = (category: ProductCategory) => {
+    if (onSelectCategoryForBooking) {
+      onSelectCategoryForBooking(category);
+    } else {
+      const bookGoodsSection = document.getElementById('book-goods');
+      if (bookGoodsSection) {
+        bookGoodsSection.scrollIntoView({ behavior: 'smooth' });
+        window.dispatchEvent(
+          new CustomEvent('anetorufa:book_category', {
+            detail: {
+              categoryId: category.id,
+              categoryTitle: category.title,
+            },
+          })
+        );
+      }
+    }
+  };
 
   const handleMakeEnquiry = (category: ProductCategory) => {
     if (onSelectCategoryForEnquiry) {
@@ -130,11 +154,12 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ onSelectCatego
               className="bg-white rounded-2xl overflow-hidden border border-gray-200/90 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col group"
             >
               {/* Category Header: Image with Overlay or Branded Card Banner */}
-              {cat.image ? (
+              {cat.image && !failedImages[cat.id] ? (
                 <div className="relative h-48 overflow-hidden bg-gray-100">
                   <img
                     src={cat.image}
                     alt={`Anetorufa Ventures ${cat.title}`}
+                    onError={() => setFailedImages((prev) => ({ ...prev, [cat.id]: true }))}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
@@ -201,28 +226,39 @@ export const ProductsSection: React.FC<ProductsSectionProps> = ({ onSelectCatego
                   </div>
                 </div>
 
-                {/* Make an Enquiry Button */}
-                <div className="pt-2 border-t border-gray-100 space-y-2">
+                {/* Card Action Buttons: Book Goods & Make an Enquiry */}
+                <div className="pt-2 border-t border-gray-100 space-y-1.5">
                   <button
                     type="button"
-                    onClick={() => handleMakeEnquiry(cat)}
-                    className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-3 bg-[#650A80] hover:bg-[#49065D] text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs transform active:scale-98"
+                    onClick={() => handleBookCategory(cat)}
+                    className="w-full inline-flex items-center justify-center gap-2 py-2 px-3 bg-[#07852D] hover:bg-[#055C1F] text-white text-xs sm:text-sm font-bold rounded-xl transition-all shadow-xs transform active:scale-98"
                   >
-                    <MessageSquare className="w-4 h-4 text-[#72E52E]" />
-                    <span>Make an Enquiry</span>
+                    <Package className="w-3.5 h-3.5 text-[#72E52E]" />
+                    <span>Book / Pre-Order Items</span>
                   </button>
 
-                  <a
-                    href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
-                      `Hello Anetorufa Ventures, I would like to make an enquiry regarding the availability and price of ${cat.title}.`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 bg-emerald-50 hover:bg-emerald-100 text-[#07852D] text-xs font-bold rounded-xl border border-emerald-200 transition-colors"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5 fill-[#07852D] text-white" />
-                    <span>WhatsApp Enquiry</span>
-                  </a>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => handleMakeEnquiry(cat)}
+                      className="inline-flex items-center justify-center gap-1.5 py-1.5 px-2 bg-purple-50 hover:bg-purple-100 text-[#650A80] text-xs font-bold rounded-xl border border-purple-200 transition-colors"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5 text-[#650A80]" />
+                      <span>Enquire</span>
+                    </button>
+
+                    <a
+                      href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
+                        `Hello Anetorufa Ventures, I would like to make an enquiry regarding the availability and price of ${cat.title}.`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1 py-1.5 px-2 bg-emerald-50 hover:bg-emerald-100 text-[#07852D] text-xs font-bold rounded-xl border border-emerald-200 transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 fill-[#07852D] text-white" />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

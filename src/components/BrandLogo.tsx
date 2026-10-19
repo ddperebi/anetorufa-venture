@@ -4,6 +4,7 @@ interface BrandLogoProps {
   className?: string;
   variant?: 'light' | 'dark' | 'symbol-only';
   showTagline?: boolean;
+  taglineClassName?: string;
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -11,20 +12,21 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   className = '',
   variant = 'light',
   showTagline = false,
+  taglineClassName = '',
   size = 'md',
 }) => {
   const isDark = variant === 'dark';
 
   const iconSizes = {
-    sm: 'w-8 h-8',
-    md: 'w-10 h-10',
-    lg: 'w-14 h-14',
+    sm: 'w-7 h-7 sm:w-8 sm:h-8',
+    md: 'w-8 h-8 xs:w-9 xs:h-9 sm:w-10 sm:h-10',
+    lg: 'w-11 h-11 sm:w-14 sm:h-14',
   };
 
   const titleSizes = {
-    sm: 'text-base sm:text-lg',
-    md: 'text-base xs:text-lg sm:text-xl',
-    lg: 'text-xl sm:text-2xl md:text-3xl',
+    sm: 'text-sm sm:text-lg',
+    md: 'text-sm min-[380px]:text-base sm:text-xl',
+    lg: 'text-lg sm:text-2xl md:text-3xl',
   };
 
   const taglineSizes = {
@@ -98,7 +100,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
             <p
               className={`${taglineSizes[size]} font-medium tracking-wide ${
                 isDark ? 'text-purple-200/90' : 'text-gray-600'
-              }`}
+              } ${taglineClassName}`}
             >
               Provisions • Fresh Foods • POS Banking
             </p>

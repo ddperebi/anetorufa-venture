@@ -7,7 +7,7 @@ interface NavbarProps {
   onOpenOwnerModal?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = () => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenOwnerModal }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -35,6 +35,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
     { name: 'Home', href: '#home' },
     { name: 'About Us', href: '#about' },
     { name: 'Products', href: '#products' },
+    { name: 'Book Goods', href: '#book-goods', highlight: true },
     { name: 'Banking Services', href: '#banking' },
     { name: 'Why Us', href: '#why-us' },
     { name: 'Contact Us', href: '#contact' },
@@ -62,18 +63,23 @@ export const Navbar: React.FC<NavbarProps> = () => {
               className="focus:outline-none focus:ring-2 focus:ring-[#650A80] rounded-lg p-0.5 transition-opacity hover:opacity-90 shrink-0"
               aria-label="Anetorufa Ventures Home"
             >
-              <BrandLogo size="md" showTagline={true} />
+              <BrandLogo size="md" showTagline={true} taglineClassName="hidden sm:block" />
             </a>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1.5 xl:gap-3" aria-label="Main Navigation">
+            <nav className="hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Main Navigation">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="px-3 py-2 text-sm font-semibold text-gray-700 hover:text-[#650A80] rounded-lg hover:bg-purple-50/70 transition-colors"
+                  className={`px-2.5 xl:px-3 py-1.5 text-xs xl:text-sm font-bold rounded-lg transition-all ${
+                    link.highlight
+                      ? 'bg-[#07852D] hover:bg-[#055C1F] text-white shadow-xs inline-flex items-center gap-1.5 transform hover:scale-[1.02]'
+                      : 'text-gray-700 hover:text-[#650A80] hover:bg-purple-50/70'
+                  }`}
                 >
-                  {link.name}
+                  {link.highlight && <ShoppingBag className="w-3.5 h-3.5 text-[#72E52E]" />}
+                  <span>{link.name}</span>
                 </a>
               ))}
             </nav>
@@ -107,16 +113,16 @@ export const Navbar: React.FC<NavbarProps> = () => {
             <div className="flex items-center gap-1.5 sm:hidden">
               <a
                 href={BUSINESS_INFO.phoneTel}
-                className="p-2 text-white bg-[#07852D] active:bg-[#055C1F] rounded-lg shadow-xs flex items-center justify-center"
-                aria-label="Call Now"
+                className="w-10 h-10 min-w-[40px] min-h-[40px] text-white bg-[#07852D] active:bg-[#055C1F] rounded-lg shadow-xs flex items-center justify-center transition-colors"
+                aria-label={`Call Anetorufa Ventures: ${BUSINESS_INFO.phone}`}
               >
-                <Phone className="w-4 h-4" />
+                <Phone className="w-4 h-4 fill-current" />
               </a>
 
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 text-gray-700 hover:text-[#650A80] hover:bg-purple-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#650A80]"
+                className="w-10 h-10 min-w-[40px] min-h-[40px] text-gray-700 hover:text-[#650A80] hover:bg-purple-50 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#650A80] flex items-center justify-center"
                 aria-expanded={mobileMenuOpen}
                 aria-label="Toggle navigation menu"
               >
@@ -142,10 +148,17 @@ export const Navbar: React.FC<NavbarProps> = () => {
                   key={link.name}
                   href={link.href}
                   onClick={handleLinkClick}
-                  className="flex items-center justify-between px-3.5 py-3 text-base font-semibold text-gray-800 hover:text-[#650A80] hover:bg-purple-50 rounded-xl transition-colors"
+                  className={`flex items-center justify-between px-3.5 py-3 text-base font-semibold rounded-xl transition-colors ${
+                    link.highlight
+                      ? 'bg-[#07852D] text-white font-bold shadow-xs'
+                      : 'text-gray-800 hover:text-[#650A80] hover:bg-purple-50'
+                  }`}
                 >
-                  <span>{link.name}</span>
-                  <ArrowRight className="w-4 h-4 text-gray-400" />
+                  <span className="flex items-center gap-2">
+                    {link.highlight && <ShoppingBag className="w-4 h-4 text-[#72E52E]" />}
+                    <span>{link.name}</span>
+                  </span>
+                  <ArrowRight className={`w-4 h-4 ${link.highlight ? 'text-white' : 'text-gray-400'}`} />
                 </a>
               ))}
 
@@ -171,6 +184,19 @@ export const Navbar: React.FC<NavbarProps> = () => {
                   <MessageCircle className="w-4 h-4 fill-[#07852D] text-white" />
                   <span>Chat on WhatsApp (08137590538)</span>
                 </a>
+
+                {onOpenOwnerModal && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onOpenOwnerModal();
+                    }}
+                    className="w-full text-center py-2 text-xs font-medium text-gray-500 hover:text-[#650A80] transition-colors"
+                  >
+                    ⚙️ Owner Settings & Messages
+                  </button>
+                )}
               </div>
             </div>
           </div>

@@ -40,7 +40,7 @@ interface FormErrors {
 interface SubmissionResult {
   success: boolean;
   messageId?: string;
-  deliveryStatus?: 'delivered_email' | 'saved_inbox_pending_owner_setup' | 'saved_inbox_email_failed';
+  deliveryStatus?: 'delivered_formspree' | 'delivered_email' | 'saved_inbox_pending_owner_setup' | 'saved_inbox_email_failed';
   message: string;
   ownerSetupNotice?: string;
 }
@@ -158,8 +158,8 @@ export const ContactSection: React.FC = () => {
         setSubmissionResult({
           success: true,
           messageId: data.messageId,
-          deliveryStatus: data.deliveryStatus,
-          message: data.message,
+          deliveryStatus: data.deliveryStatus || 'delivered_formspree',
+          message: data.message || 'Thank you! Your enquiry has been sent directly to our business email via Formspree and recorded. We will contact you shortly.',
           ownerSetupNotice: data.ownerSetupNotice,
         });
 
@@ -185,26 +185,68 @@ export const ContactSection: React.FC = () => {
         });
       }
     } catch (err) {
-      console.error('Contact form submission error:', err);
+      console.warn('Backend route issue, falling back to direct Formspree dispatch:', err);
+      try {
+        const directFsRes = await fetch('https://formspree.io/f/xrpejnno', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            _subject: `[Anetorufa Website Enquiry] ${formData.enquiryType}: ${formData.subject.trim()}`,
+            name: formData.fullName.trim(),
+            phoneNumber: formData.phoneNumber.trim(),
+            email: formData.email.trim() || undefined,
+            _replyto: formData.email.trim() || undefined,
+            enquiryCategory: formData.enquiryType,
+            subject: formData.subject.trim(),
+            message: formData.message.trim(),
+            submissionTime: new Date().toLocaleString(),
+            formSource: 'Anetorufa Ventures Contact Form (Direct)',
+          }),
+        });
+
+        if (directFsRes.ok) {
+          setSubmissionResult({
+            success: true,
+            deliveryStatus: 'delivered_formspree',
+            message: 'Thank you! Your enquiry has been forwarded directly to management via Formspree. We will contact you shortly.',
+          });
+          setFormData({
+            fullName: '',
+            phoneNumber: '',
+            email: '',
+            enquiryType: 'Product Enquiry',
+            subject: '',
+            message: '',
+            consent: false,
+            honeypot: '',
+          });
+          setErrors({});
+          return;
+        }
+      } catch (fsErr) {
+        console.error('Direct Formspree failed:', fsErr);
+      }
+
       setSubmissionResult({
         success: false,
-        message: 'Could not connect to the server. Your information has been kept in the form. Please try again or reach us via phone or WhatsApp.',
+        message: 'Could not connect to the network. Your information has been kept in the form. Please try again or reach us via phone or WhatsApp.',
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleWhatsAppForward = () => {
-    const text = `*New Customer Enquiry (Anetorufa Ventures Website)*\n` +
-      `*Name:* ${formData.fullName || 'Customer'}\n` +
-      `*Phone:* ${formData.phoneNumber || 'Not provided'}\n` +
-      `*Category:* ${formData.enquiryType}\n` +
-      `*Subject:* ${formData.subject || 'Enquiry'}\n` +
-      `*Message:* ${formData.message || 'Hello, I would like to make an enquiry.'}`;
-
-    window.open(`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(text)}`, '_blank');
-  };
+  const whatsAppEnquiryUrl = `https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
+    `*New Customer Enquiry (Anetorufa Ventures Website)*\n` +
+    `*Name:* ${formData.fullName.trim() || 'Customer'}\n` +
+    `*Phone:* ${formData.phoneNumber.trim() || 'Not provided'}\n` +
+    `*Category:* ${formData.enquiryType}\n` +
+    `*Subject:* ${formData.subject.trim() || 'General Enquiry'}\n` +
+    `*Message:* ${formData.message.trim() || 'Hello, I would like to make an enquiry.'}`
+  )}`;
 
   return (
     <section id="contact" className="py-12 sm:py-20 bg-white border-t border-gray-100 relative">
@@ -572,17 +614,18 @@ export const ContactSection: React.FC = () => {
                     )}
                   </button>
 
-                  {/* Optional Quick WhatsApp button using typed text */}
+                  {/* Optional Quick WhatsApp link using typed text */}
                   {formData.message.trim().length > 0 && (
-                    <button
-                      type="button"
-                      onClick={handleWhatsAppForward}
-                      className="inline-flex items-center justify-center gap-2 py-3 px-4 bg-emerald-50 hover:bg-emerald-100 text-[#07852D] border border-emerald-300 font-bold text-xs sm:text-sm rounded-xl transition-colors shadow-xs"
+                    <a
+                      href={whatsAppEnquiryUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 py-3 px-4 bg-emerald-50 hover:bg-emerald-100 active:bg-emerald-200 text-[#07852D] border border-emerald-300 font-bold text-xs sm:text-sm rounded-xl transition-colors shadow-xs"
                       title="Also forward this exact message via WhatsApp"
                     >
                       <MessageCircle className="w-4 h-4 fill-[#07852D] text-white" />
                       <span>Send via WhatsApp</span>
-                    </button>
+                    </a>
                   )}
                 </div>
 

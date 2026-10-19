@@ -10,7 +10,7 @@ export const FloatingActions: React.FC = () => {
   )}`;
 
   return (
-    <aside aria-label="Quick contact buttons" className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2.5 pointer-events-none">
+    <aside aria-label="Quick contact buttons" className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2.5 pointer-events-none pb-[env(safe-area-inset-bottom,0px)]">
       {/* Tooltip greeting popup */}
       {showTooltip && (
         <div className="pointer-events-auto bg-white p-3 rounded-2xl shadow-xl border border-emerald-100 max-w-[260px] sm:max-w-xs text-xs text-gray-700 animate-in fade-in slide-in-from-bottom-2 duration-200 flex items-start gap-2.5 mb-1">

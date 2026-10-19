@@ -1,5 +1,5 @@
-import cannedFoodsImg from '../assets/images/canned_packaged_foods_1792281177555.jpg';
-import garriYamImg from '../assets/images/garri_yam_cassava_1792282036042.jpg';
+import cannedFoodsImg from '../assets/images/canned_packaged_goods_1792414096694.jpg';
+import garriYamImg from '../assets/images/garri_and_yam_tubers_1792414111676.jpg';
 
 export interface ProductCategory {
   id: string;

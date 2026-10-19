@@ -3,6 +3,7 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { AboutUs } from './components/AboutUs';
 import { ProductsSection } from './components/ProductsSection';
+import { BookGoodsSection } from './components/BookGoodsSection';
 import { PosBankingSection } from './components/PosBankingSection';
 import { WhyChooseUs } from './components/WhyChooseUs';
 import { ContactSection } from './components/ContactSection';
@@ -32,6 +33,22 @@ export default function App() {
     );
   };
 
+  const handleSelectCategoryForBooking = (category: ProductCategory) => {
+    const bookGoodsSection = document.getElementById('book-goods');
+    if (bookGoodsSection) {
+      bookGoodsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.dispatchEvent(
+      new CustomEvent('anetorufa:book_category', {
+        detail: {
+          categoryId: category.id,
+          categoryTitle: category.title,
+        },
+      })
+    );
+  };
+
   return (
     <div className="min-h-screen bg-white text-gray-900 font-sans antialiased selection:bg-[#650A80] selection:text-white">
       {/* Navigation Header */}
@@ -46,15 +63,21 @@ export default function App() {
         <AboutUs />
 
         {/* C. Products and Provisions (8 Categories) */}
-        <ProductsSection onSelectCategoryForEnquiry={handleSelectCategoryForEnquiry} />
+        <ProductsSection
+          onSelectCategoryForEnquiry={handleSelectCategoryForEnquiry}
+          onSelectCategoryForBooking={handleSelectCategoryForBooking}
+        />
 
-        {/* D. POS and Banking Services (7 Services, 3 Benefits) */}
+        {/* D. Book Goods & Foodstuffs Form */}
+        <BookGoodsSection />
+
+        {/* E. POS and Banking Services (7 Services, 3 Benefits) */}
         <PosBankingSection />
 
-        {/* E. Why Choose Us (5 Core Benefits) */}
+        {/* F. Why Choose Us (5 Core Benefits) */}
         <WhyChooseUs />
 
-        {/* F. Contact Us (Direct channels & functional contact form) */}
+        {/* G. Contact Us (Direct channels & functional contact form) */}
         <ContactSection />
       </main>
 

@@ -82,6 +82,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOwnerSetup }) => {
                 </a>
               </li>
               <li>
+                <a href="#book-goods" className="text-[#72E52E] font-bold hover:underline transition-colors">
+                  ★ Book Goods Online
+                </a>
+              </li>
+              <li>
                 <a href="#banking" className="hover:text-white transition-colors">
                   POS Banking Services
                 </a>
